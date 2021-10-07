@@ -27,9 +27,9 @@ app.use('/graphql', graphqlHTTP({
   }));
 
 // define a route handler for the default home page
-app.get( "/", ( req, res ) => {
-    res.send( "Hello world from normal api" );
-} );
+app.get('/', (req, res) => {
+  res.send('Hello world from normal api');
+});
 
 // start the Express server
 app.listen( port, () => {
