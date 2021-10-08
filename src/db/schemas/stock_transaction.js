@@ -29,16 +29,16 @@ const stockTransaction = new GraphQLObjectType({
 const Query = new GraphQLObjectType({
   name: 'Query',
   description: 'this is a root query',
-  fields: async () => {
+  fields: () => {
     return {
       stockTransaction: {
         type: stockTransaction,
         args: {},
         async resolve(root, args) {
           const user = await stock_transactions.findAll();
-          console.log(user);
+          console.log(user[0]);
           if (user) {
-            res.send(user[0]);
+            return user[0];
           }
         },
       },
