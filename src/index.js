@@ -4,7 +4,7 @@ const { buildSchema } = require('graphql');
 
 const db = require('./db/models/index.js');
 const schema = require('./db/schemas/stock_transaction.js');
-const { stock_transactions } = db;
+const { stock_transaction } = db;
 
 // // Construct a schema, using GraphQL schema language
 // var schema = buildSchema(`
@@ -33,7 +33,7 @@ app.use(
 
 // define a route handler for the default home page
 app.get('/', async (req, res) => {
-  const user = await stock_transactions.findAll();
+  const user = await stock_transaction.findAll();
   console.log(user);
   if (user) {
     res.send(user[0]);

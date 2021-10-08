@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class stock_transactions extends Model {
+  class stock_transaction extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -12,17 +12,21 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
-  };
-  stock_transactions.init({
-    symbol: DataTypes.STRING,
-    open_price: DataTypes.FLOAT,
-    size: DataTypes.INTEGER,
-    open_date: DataTypes.DATE,
-    close_date: DataTypes.DATE,
-    close_price: DataTypes.FLOAT
-  }, {
-    sequelize,
-    modelName: 'stock_transactions',
-  });
-  return stock_transactions;
+  }
+  stock_transaction.init(
+    {
+      symbol: DataTypes.STRING,
+      open_price: DataTypes.FLOAT,
+      size: DataTypes.INTEGER,
+      open_date: DataTypes.DATE,
+      close_date: DataTypes.DATE,
+      close_price: DataTypes.FLOAT,
+    },
+    {
+      sequelize,
+      modelName: 'stock_transaction',
+      tableName: 'stock_transactions',
+    },
+  );
+  return stock_transaction;
 };
