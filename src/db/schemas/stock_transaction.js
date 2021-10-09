@@ -8,19 +8,49 @@ const {
 } = require('graphql');
 const db = require('../models/index.js');
 
-const { stock_transaction } = db;
+const { StockTransaction } = db;
 
-const stockTransaction = new GraphQLObjectType({
+const StockTransactionType = new GraphQLObjectType({
   name: 'stock_transactions',
   description: 'this represents a stock transction',
   fields: () => {
     return {
       symbol: { type: GraphQLString },
-      open_price: { type: GraphQLFloat },
+      openPrice: { type: GraphQLFloat },
       size: { type: GraphQLInt },
-      open_date: { type: GraphQLString },
-      close_date: { type: GraphQLString },
-      close_price: { type: GraphQLFloat },
+      openDate: { type: GraphQLString },
+      closeDate: { type: GraphQLString },
+      closePrice: { type: GraphQLFloat },
+    };
+  },
+});
+
+const Mutation = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: () => {
+    return {
+      addStockTransaction: {
+        type: StockTransactionType,
+        args: {
+          symbol: { type: GraphQLString },
+          openPrice: { type: GraphQLFloat },
+          size: { type: GraphQLInt },
+          openDate: { type: GraphQLString },
+          closeDate: { type: GraphQLString },
+          closePrice: { type: GraphQLFloat },
+        },
+        async resolve(root, args) {
+          const newStockTransaction = await StockTransaction.create({
+            symbol: args.symbol,
+            openPrice: args.openPrice,
+            size: args.size,
+            openDate: '2021-10-09 08:32:15.639653+00',
+            closeDate: '2021-10-09 08:32:15.639653+00',
+            closePrice: args.closePrice,
+          });
+          return newStockTransaction;
+        },
+      },
     };
   },
 });
@@ -31,20 +61,20 @@ const Query = new GraphQLObjectType({
   fields: () => {
     return {
       stockTransactions: {
-        type: new GraphQLList(stockTransaction),
+        type: new GraphQLList(StockTransactionType),
         args: {},
         async resolve(root, args) {
-          const user = await stock_transaction.findAll();
+          const user = await StockTransaction.findAll();
           if (user) {
             return user;
           }
         },
       },
       stockTransaction: {
-        type: stockTransaction,
+        type: StockTransactionType,
         args: {},
         async resolve(root, args) {
-          const user = await stock_transaction.findAll();
+          const user = await StockTransaction.findAll();
           if (user) {
             return user[0];
           }
@@ -54,4 +84,7 @@ const Query = new GraphQLObjectType({
   },
 });
 
-module.exports = new GraphQLSchema({ query: Query });
+module.exports = new GraphQLSchema({
+  query: Query,
+  mutation: Mutation,
+});

@@ -3,23 +3,35 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class stock_transaction extends Model {
+  class StockTransaction extends Model {
     static associate(models) {}
   }
-  stock_transaction.init(
+  StockTransaction.init(
     {
       symbol: DataTypes.STRING,
-      open_price: DataTypes.FLOAT,
+      openPrice: {
+        type: DataTypes.FLOAT,
+        field: 'open_price',
+      },
       size: DataTypes.INTEGER,
-      open_date: DataTypes.DATE,
-      close_date: DataTypes.DATE,
-      close_price: DataTypes.FLOAT,
+      openDate: {
+        type: DataTypes.DATE,
+        field: 'open_date',
+      },
+      closeDate: {
+        type: DataTypes.DATE,
+        field: 'close_date',
+      },
+      closePrice: {
+        type: DataTypes.FLOAT,
+        field: 'close_price',
+      },
     },
     {
       sequelize,
-      modelName: 'stock_transaction',
+      modelName: 'StockTransaction',
       tableName: 'stock_transactions',
     },
   );
-  return stock_transaction;
+  return StockTransaction;
 };
