@@ -3,13 +3,12 @@ const {
   GraphQLString,
   GraphQLInt,
   GraphQLSchema,
-  GraphQLList,
-  GraphQLNonNull,
   GraphQLFloat,
+  GraphQLList,
 } = require('graphql');
 const db = require('../models/index.js');
 
-const { stock_transactions } = db;
+const { stock_transaction } = db;
 
 const stockTransaction = new GraphQLObjectType({
   name: 'stock_transactions',
@@ -31,12 +30,21 @@ const Query = new GraphQLObjectType({
   description: 'this is a root query',
   fields: () => {
     return {
+      stockTransactions: {
+        type: new GraphQLList(stockTransaction),
+        args: {},
+        async resolve(root, args) {
+          const user = await stock_transaction.findAll();
+          if (user) {
+            return user;
+          }
+        },
+      },
       stockTransaction: {
         type: stockTransaction,
         args: {},
         async resolve(root, args) {
-          const user = await stock_transactions.findAll();
-          console.log(user[0]);
+          const user = await stock_transaction.findAll();
           if (user) {
             return user[0];
           }
