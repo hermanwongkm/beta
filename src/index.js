@@ -1,4 +1,5 @@
-const express = require( "express" );   
+const cors = require('cors');
+const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 
 const db = require('./db/models/index.js');
@@ -7,6 +8,11 @@ const { StockTransaction } = db;
 
 const app = express();
 const port = 8080; // default port to listen
+app.use(
+  cors({
+    origin: '*',
+  }),
+);
 
 app.use(
   '/graphql',
@@ -26,8 +32,6 @@ app.get('/', async (req, res) => {
 });
 
 // start the Express server
-app.listen( port, () => {
-    console.log( `server started at http://localhost:${ port }` );
-} );
-
-
+app.listen(port, () => {
+  console.log(`server started at http://localhost:${port}`);
+});
