@@ -1,5 +1,4 @@
 # Beta 
-
 ## Migration
 ----
 1. You can create a MODEL and a MIGRATION SCRIPT using the command `node_modules/.bin/sequelize model:create --name Todo --attributes title:string,something:integer` Note that there should not be spaces between the attributes.

@@ -32,6 +32,7 @@ const Mutation = new GraphQLObjectType({
       addStockTransaction: {
         type: StockTransactionType,
         args: {
+          //This is your input variables
           symbol: { type: GraphQLString },
           openPrice: { type: GraphQLFloat },
           size: { type: GraphQLInt },
@@ -55,12 +56,16 @@ const Mutation = new GraphQLObjectType({
   },
 });
 
+//The “query” type’s name is “Query” and has 2 field called
+//“stockTransactions” and "stockTransaction"
+// Each of it has a resolver function that will return whatever you want
 const Query = new GraphQLObjectType({
   name: 'Query',
   description: 'this is a root query',
   fields: () => {
     return {
       stockTransactions: {
+        //each of this is a field
         type: new GraphQLList(StockTransactionType),
         args: {},
         async resolve(root, args) {
@@ -71,6 +76,7 @@ const Query = new GraphQLObjectType({
         },
       },
       stockTransaction: {
+        //This is another field
         type: StockTransactionType,
         args: {},
         async resolve(root, args) {
@@ -84,7 +90,13 @@ const Query = new GraphQLObjectType({
   },
 });
 
+//Think of this as a service
+//Every GraphQL service defines a set of types which completely
+// describe the set of possible data you can query on that service.
+//1. GraphQL has the concept of schemas.
+// So inside this schema we have the Query and Mutation types.
+// Inside the schema, we have a type called “query” which is created using GraphQLObjectType
 module.exports = new GraphQLSchema({
-  query: Query,
+  query: Query, //Every schema must have a query type which is created using GraphQLObjectType
   mutation: Mutation,
 });
