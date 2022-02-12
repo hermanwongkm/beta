@@ -9,11 +9,13 @@ module.exports = (sequelize, DataTypes) => {
   StockTransaction.init(
     {
       symbol: DataTypes.STRING,
+
       openPrice: {
         type: DataTypes.FLOAT,
         field: 'open_price',
       },
       size: DataTypes.INTEGER,
+      
       openDate: {
         type: DataTypes.DATE,
         field: 'open_date',

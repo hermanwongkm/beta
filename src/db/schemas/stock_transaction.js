@@ -13,6 +13,7 @@ const { StockTransaction } = db;
 const StockTransactionType = new GraphQLObjectType({
   name: 'stock_transactions',
   description: 'this represents a stock transction',
+  // The fields object is used for defining all the fields in a particular type. 
   fields: () => {
     return {
       symbol: { type: GraphQLString },
@@ -25,6 +26,7 @@ const StockTransactionType = new GraphQLObjectType({
   },
 });
 
+//Mutation represents POST, PUT, DELETE requests in REST API.
 const Mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: () => {
@@ -40,6 +42,9 @@ const Mutation = new GraphQLObjectType({
           closeDate: { type: GraphQLString },
           closePrice: { type: GraphQLFloat },
         },
+        //root: This is the result of the parent resolver. 
+        //args: The arguments or data provided by the graphQL query. This can be seen as the request payload in REST API.
+        //context: An object available to all resolvers. Any data that should be globally accessible to all resolvers are placed in the context. For example, we can pass the Sequelize models to the context.
         async resolve(root, args) {
           const newStockTransaction = await StockTransaction.create({
             symbol: args.symbol,
@@ -56,6 +61,7 @@ const Mutation = new GraphQLObjectType({
   },
 });
 
+// Query represents the GET request in REST API
 //The “query” type’s name is “Query” and has 2 field called
 //“stockTransactions” and "stockTransaction"
 // Each of it has a resolver function that will return whatever you want
