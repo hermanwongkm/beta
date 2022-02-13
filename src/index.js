@@ -2,9 +2,7 @@ const cors = require('cors');
 const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 
-const db = require('./db/models/index.js');
-const schema = require('./db/schemas/stock_transaction.js');
-const { StockTransaction } = db;
+const schema = require('./db/schemas/index.js');
 
 const app = express();
 const port = 8080; // default port to listen
@@ -24,11 +22,7 @@ app.use(
 
 // define a route handler for the default home page
 app.get('/', async (req, res) => {
-  const user = await StockTransaction.findAll();
-  console.log(user);
-  if (user) {
-    res.send(user[0]);
-  }
+    res.send("Hello World");
 });
 
 // start the Express server
