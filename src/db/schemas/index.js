@@ -9,7 +9,8 @@ const {
 } = require('./stocks/index.js');
 const { 
   FoodMapLocationsSchema,
-  FoodMapLocationMutationSchema
+  AddFoodMapLocationsSchema,
+  UpdateFoodMapLocationSchema
 } = require('./foodMap/index.js');
 
 //Mutation represents POST, PUT, DELETE requests in REST API.
@@ -18,11 +19,11 @@ const rootMutation = new GraphQLObjectType({
   fields: () => {
     return {
       addStockTransaction: StockTransactionMutationSchema,
-      addFoodMapLocation: FoodMapLocationMutationSchema,
+      addFoodMapLocation: AddFoodMapLocationsSchema,
+      updateFoodMapLocationSchema: UpdateFoodMapLocationSchema
     };
   },
 });
-
 
 // Query represents the GET request in REST API
 //The “query” type’s name is “Query” and has 2 field called

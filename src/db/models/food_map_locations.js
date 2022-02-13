@@ -3,10 +3,10 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class StockTransaction extends Model {
+  class FoodMapLocation extends Model {
     static associate(models) {}
   }
-  StockTransaction.init(
+  FoodMapLocation.init(
     {
       title: DataTypes.STRING,
       description: DataTypes.STRING,
@@ -20,5 +20,5 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'food_map_locations',
     },
   );
-  return StockTransaction;
+  return FoodMapLocation;
 };

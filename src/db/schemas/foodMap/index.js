@@ -1,10 +1,10 @@
 const {
   GraphQLObjectType,
   GraphQLString,
+  GraphQLInt,
   GraphQLList,
 } = require('graphql');
 const db = require('../../models');
-
 
 const { FoodMapLocation } = db
 
@@ -13,6 +13,7 @@ const FoodMapLocationType = new GraphQLObjectType({
   description: 'this represents a food map location',
   fields: () => {
     return {
+      id: { type: GraphQLInt },
       title: { type: GraphQLString },
       description: { type: GraphQLString },
       address: { type: GraphQLString },
@@ -32,7 +33,7 @@ const FoodMapLocationsSchema = {
   }
 }
 
-const FoodMapLocationMutationSchema = {
+const AddFoodMapLocationsSchema = {
   type: FoodMapLocationType,
   args: {
     //This is your input variables
@@ -52,5 +53,37 @@ const FoodMapLocationMutationSchema = {
   },
 }
 
+const UpdateFoodMapLocationSchema = {
+  type: FoodMapLocationType,
+  args: {
+    id: { type: GraphQLString },
+    title: { type: GraphQLString },
+    description: { type: GraphQLString },
+    address: { type: GraphQLString },
+    rating: { type: GraphQLString },
+  },
+  async resolve(root, args) {
+    const foodMapLocation = await FoodMapLocation.findOne({
+      where: {
+        id: args.id,
+      },
+    });
+    if(!foodMapLocation){
+      throw new Error('Food Map Location not found');
+    }
 
-module.exports = {FoodMapLocationsSchema,FoodMapLocationMutationSchema}
+    foodMapLocation.update({
+      title: args.title,
+      description: args.description,
+      address: args.address,
+      rating: args.rating,
+    });
+    return foodMapLocation;
+  }
+}
+
+module.exports = {
+  FoodMapLocationsSchema,
+  AddFoodMapLocationsSchema,
+  UpdateFoodMapLocationSchema
+}
