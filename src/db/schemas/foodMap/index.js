@@ -2,6 +2,7 @@ const {
   GraphQLObjectType,
   GraphQLString,
   GraphQLInt,
+  GraphQLFloat,
   GraphQLList,
 } = require('graphql');
 const db = require('../../models');
@@ -15,6 +16,8 @@ const FoodMapLocationType = new GraphQLObjectType({
     return {
       entry: {type: locationDetails},
       id: { type: GraphQLInt },
+      lat: {type:GraphQLFloat},
+      long: {type:GraphQLFloat},
     };
   },
 });
@@ -42,8 +45,8 @@ const FoodMapLocationsSchema = {
     });
     const parsedLocations = locations.map(location => {
       // assigns remaining keys to a new `entry` object using destructuring
-      const {id, ...entry} = location
-      return {id, entry}
+      const {id,lat,long, ...entry} = location
+      return {id,lat,long, entry}
     });
       return parsedLocations;
   }

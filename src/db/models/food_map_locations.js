@@ -12,6 +12,8 @@ module.exports = (sequelize, DataTypes) => {
       description: DataTypes.STRING,
       address: DataTypes.STRING,
       rating: DataTypes.STRING,
+      lat: DataTypes.DECIMAL,
+      long: DataTypes.DECIMAL,
     
     },
     {
