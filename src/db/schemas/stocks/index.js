@@ -7,7 +7,6 @@ const {
 } = require('graphql');
 const db = require('../../models');
 
-
 const { StockTransaction } = db
 
 const StockTransactionType = new GraphQLObjectType({
@@ -21,6 +20,19 @@ const StockTransactionType = new GraphQLObjectType({
       size: { type: GraphQLInt },
       date: { type: GraphQLString },
       type: { type: GraphQLString },
+      stockTransactionStream: {type:StockTransactionStreamType},
+    };
+  },
+});
+
+const StockTransactionStreamType = new GraphQLObjectType({
+  name: 'stock_transaction_stream_type',
+  description: 'this represents a stock transction stream',
+  fields: () => {
+    return {
+      streamId: { type: GraphQLString },
+      version: { type: GraphQLInt },
+      type: { type: GraphQLString },
     };
   },
 });
@@ -29,7 +41,16 @@ const StockTransactionSchema = {
   type: new GraphQLList(StockTransactionType),
   args: {},
   async resolve(root, args) {
-    const user = await StockTransaction.findAll();
+    const user = await StockTransaction.findAll({
+      //Raw does not work as it converts it into a string, but we need it as a JSON
+      nested: true,
+      include: [
+        {
+          as: 'stockTransactionStream',
+          model: db.StockTransactionStream,
+        }
+      ]
+    });
     if (user) {
       return user;
     }
