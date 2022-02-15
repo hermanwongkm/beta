@@ -8,23 +8,29 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      stockStreamId: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {model: 'stock_transactions_streams', key: 'streamId'},
+      },
+      version: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
       symbol: {
         type: Sequelize.STRING
       },
-      open_price: {
+      price: {
         type: Sequelize.FLOAT
       },
       size: {
         type: Sequelize.INTEGER
       },
-      open_date: {
+      date: {
         type: Sequelize.DATE
       },
-      close_date: {
-        type: Sequelize.DATE
-      },
-      close_price: {
-        type: Sequelize.FLOAT
+      type: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,

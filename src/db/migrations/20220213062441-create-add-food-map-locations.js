@@ -31,6 +31,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('add-food-map-locations');
+    await queryInterface.dropTable('food_map_locations');
   }
 };

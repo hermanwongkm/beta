@@ -17,11 +17,10 @@ const StockTransactionType = new GraphQLObjectType({
   fields: () => {
     return {
       symbol: { type: GraphQLString },
-      openPrice: { type: GraphQLFloat },
+      price: { type: GraphQLFloat },
       size: { type: GraphQLInt },
-      openDate: { type: GraphQLString },
-      closeDate: { type: GraphQLString },
-      closePrice: { type: GraphQLFloat },
+      date: { type: GraphQLString },
+      type: { type: GraphQLString },
     };
   },
 });

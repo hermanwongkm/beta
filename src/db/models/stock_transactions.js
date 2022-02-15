@@ -9,25 +9,13 @@ module.exports = (sequelize, DataTypes) => {
   StockTransaction.init(
     {
       symbol: DataTypes.STRING,
-
-      openPrice: {
+      price: {
         type: DataTypes.FLOAT,
-        field: 'open_price',
+        field: 'price', // this will map to `price` to `price` just in case you need something else
       },
       size: DataTypes.INTEGER,
-      
-      openDate: {
-        type: DataTypes.DATE,
-        field: 'open_date',
-      },
-      closeDate: {
-        type: DataTypes.DATE,
-        field: 'close_date',
-      },
-      closePrice: {
-        type: DataTypes.FLOAT,
-        field: 'close_price',
-      },
+      date: DataTypes.DATE,
+      type: DataTypes.STRING
     },
     {
       sequelize,
