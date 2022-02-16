@@ -6,12 +6,15 @@ const {
   StockTransactionSchema,
   StockTransactionsSchema,
   StockTransactionMutationSchema,
-} = require('./stocks/index.js');
+} = require('./stocks/stockTransaction');
 const { 
   FoodMapLocationsSchema,
   AddFoodMapLocationsSchema,
   UpdateFoodMapLocationSchema
 } = require('./foodMap/index.js');
+const {
+  StockTransactionStreamSchema
+} = require('./stocks/stockTransactionStream.js');
 
 //Mutation represents POST, PUT, DELETE requests in REST API.
 const rootMutation = new GraphQLObjectType({
@@ -37,6 +40,7 @@ const rootQuery = new GraphQLObjectType({
       stockTransactions: StockTransactionsSchema,
       stockTransaction: StockTransactionSchema,
       foodMapLocations: FoodMapLocationsSchema,
+      stockTransactionStreamSchema: StockTransactionStreamSchema
     };
   },
 });

@@ -19,9 +19,9 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'stock_transactions_streams',
     },
   );
-  // StockTransactionStream.associate = (models) =>{
-  //   StockTransactionStream.hasMany(models.StockTransaction, {foreignKey: 'stockStreamId'});
-  // }
+  StockTransactionStream.associate = (models) =>{
+    StockTransactionStream.hasMany(models.StockTransaction, {foreignKey: 'stockStreamId'});
+  }
 
   return StockTransactionStream;
 };

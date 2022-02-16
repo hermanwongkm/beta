@@ -14,7 +14,6 @@ module.exports = (sequelize, DataTypes) => {
       rating: DataTypes.STRING,
       lat: DataTypes.DECIMAL,
       long: DataTypes.DECIMAL,
-    
     },
     {
       sequelize,
