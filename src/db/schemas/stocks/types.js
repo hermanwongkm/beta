@@ -3,6 +3,7 @@ const {
   GraphQLString,
   GraphQLInt,
   GraphQLFloat,
+  GraphQLList
 } = require('graphql');
 
 const StockTransactionType = new GraphQLObjectType({
@@ -29,6 +30,7 @@ const StockTransactionStreamType = new GraphQLObjectType({
       streamId: { type: GraphQLString },
       version: { type: GraphQLInt },
       type: { type: GraphQLString },
+      stockTransactions: { type:new GraphQLList(StockTransactionType) },
     };
   },
 });

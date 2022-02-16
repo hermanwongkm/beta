@@ -10,8 +10,13 @@ const StockTransactionStreamSchema = {
   args: {},
   async resolve(root, args) {
     const user = await StockTransactionStream.findAll({
-      raw: true,
-    });
+      include: [
+        {
+          as: 'stockTransactions',
+          model: db.StockTransaction,
+        }
+      ]
+      });
     if (user) {
       return user;
     }

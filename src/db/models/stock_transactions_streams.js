@@ -19,8 +19,18 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'stock_transactions_streams',
     },
   );
-  StockTransactionStream.associate = (models) =>{
-    StockTransactionStream.hasMany(models.StockTransaction, {foreignKey: 'stockStreamId'});
+  StockTransactionStream.associate = (models) => {
+    StockTransactionStream.hasMany(
+      models.StockTransaction, 
+      {
+         as:'stockTransactions',
+         // This foreign key is merely used to join the table
+         // So imagine, when you make this query, it will do:
+         // ON "StockTransactionStream"."streamId" = "stockTransactions"."stockStreamId";
+         foreignKey: 'stockStreamId',
+        sourceKey: 'streamId'
+      }
+    );
   }
 
   return StockTransactionStream;
