@@ -28,7 +28,12 @@ module.exports = (sequelize, DataTypes) => {
   );
     StockTransaction.associate = (models) => {
       StockTransaction.belongsTo(models.StockTransactionStream,
-         {as: 'stockTransactionStream', foreignKey: 'stockStreamId', targetKey: 'streamId'});
+         {
+            as: 'stockTransactionStream',
+            foreignKey: 'stockStreamId',
+            targetKey: 'streamId'
+          }
+      );
          //Targetkey is the name of the key this foreign key refers. By default,
          //it is the primary key, hence we need to specify it
          //I added a as because by default it takes the objectName which is capitalized

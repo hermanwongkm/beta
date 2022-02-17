@@ -6,9 +6,10 @@ const {
 } = require('graphql');
 const {StockTransactionType, StockTransactionStreamType} = require('./types');
 const db = require('../../models');
+const { sequelize } = require('../../models');
 
 
-const { StockTransaction } = db
+const { StockTransaction, StockTransactionStream } = db
 
 const StockTransactionSchema = {     
   type: new GraphQLList(StockTransactionType),
@@ -56,14 +57,19 @@ const StockTransactionMutationSchema = {
   //args: The arguments or data provided by the graphQL query. This can be seen as the request payload in REST API.
   //context: An object available to all resolvers. Any data that should be globally accessible to all resolvers are placed in the context. For example, we can pass the Sequelize models to the context.
   async resolve(root, args) {
-    const newStockTransaction = await StockTransaction.create({
-      symbol: args.symbol,
-      openPrice: args.openPrice,
-      size: args.size,
-      openDate: '2021-10-09 08:32:15.639653+00',
-      closeDate: '2021-10-09 08:32:15.639653+00',
-      closePrice: args.closePrice,
+    const stockStream = await StockTransactionStream.findOne({
+      where: {
+        type: args.symbol,
+      }
     });
+    //Optimistic locking is used to prevent concurrent updates to the same record.
+    //So we will check if the version is the same as the one in the database.
+    await sequelize.query(`UPDATE stock_transactions_streams SET version = ${stockStream.version} + 1 WHERE version = '${stockStream.version}' AND id = '${stockStream.id}'`);
+    
+    const newStockTransaction = await sequelize.query(`INSERT INTO stock_transactions 
+    ("symbol", "price", "size", "date", "version", "stockStreamId") VALUES 
+    ('${args.symbol}', ${args.price}, ${args.size}, '2021-10-09 08:32:15.639653+00', ${stockStream.version} + 1, '${stockStream.streamId}')`);
+
     return newStockTransaction;
   },
 }
