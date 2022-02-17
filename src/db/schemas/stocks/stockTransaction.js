@@ -47,11 +47,10 @@ const StockTransactionMutationSchema = {
   args: {
     //This is your input variables
     symbol: { type: GraphQLString },
-    openPrice: { type: GraphQLFloat },
+    price: { type: GraphQLFloat },
     size: { type: GraphQLInt },
-    openDate: { type: GraphQLString },
-    closeDate: { type: GraphQLString },
-    closePrice: { type: GraphQLFloat },
+    date: { type: GraphQLString },
+    version: { type: GraphQLInt },
   },
   //root: This is the result of the parent resolver. 
   //args: The arguments or data provided by the graphQL query. This can be seen as the request payload in REST API.

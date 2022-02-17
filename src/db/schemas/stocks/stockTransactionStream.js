@@ -23,4 +23,6 @@ const StockTransactionStreamSchema = {
   }
 }
 
+
+
 module.exports = {StockTransactionStreamSchema}
