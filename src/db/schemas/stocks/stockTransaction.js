@@ -4,10 +4,8 @@ const {
   GraphQLFloat,
   GraphQLList,
 } = require('graphql');
-const {StockTransactionType, StockTransactionStreamType} = require('./types');
+const {StockTransactionType } = require('./types');
 const db = require('../../models');
-const { sequelize } = require('../../models');
-
 
 const { StockTransaction, StockTransactionStream } = db
 
@@ -15,7 +13,7 @@ const StockTransactionSchema = {
   type: new GraphQLList(StockTransactionType),
   args: {},
   async resolve(root, args) {
-    const user = await StockTransaction.findAll({
+    const stockTransaction = await StockTransaction.findAll({
       //Raw does not work as it converts it into a string, but we need it as a JSON
       nested: true,
       include: [
@@ -25,8 +23,8 @@ const StockTransactionSchema = {
         }
       ]
     });
-    if (user) {
-      return user;
+    if (stockTransaction) {
+      return stockTransaction;
     }
   }
 }
@@ -36,17 +34,16 @@ const StockTransactionsSchema = {
   type: new GraphQLList(StockTransactionType),
   args: {},
   async resolve(root, args) {
-    const user = await StockTransaction.findAll();
-    if (user) {
-      return user;
+    const stockTransactions = await StockTransaction.findAll();
+    if (stockTransactions) {
+      return stockTransactions;
     }
   }
 }
 
 const StockTransactionMutationSchema = {
   type: StockTransactionType,
-  args: {
-    //This is your input variables
+  args: { //This is your input variables
     symbol: { type: GraphQLString },
     price: { type: GraphQLFloat },
     size: { type: GraphQLInt },
@@ -63,23 +60,25 @@ const StockTransactionMutationSchema = {
         version: 1,
       }
     });
-    console.log(stockTransactionStream)
-    console.log(created)
-
-    const stockStream = await StockTransactionStream.findOne({
-
+    if(!created) {
+        await stockTransactionStream.update({
+          version: stockTransactionStream.version + 1,
+        },{
+          //Optimistic locking is used to prevent concurrent updates to the same record.
+        //So we will check if the version is the same as the one in the database.
+        where: { version: stockTransactionStream.version}
+      });
+    }
+    const stockTransaction = await StockTransaction.create({
+      symbol: args.symbol,
+      price: args.price,
+      size: args.size,
+      date: args.date,
+      version: stockTransactionStream.version,
+      stockStreamId: stockTransactionStream.streamId,
     });
-    //Optimistic locking is used to prevent concurrent updates to the same record.
-    //So we will check if the version is the same as the one in the database.
-    await sequelize.query(`UPDATE stock_transactions_streams SET version = ${stockStream.version} + 1 WHERE version = '${stockStream.version}' AND id = '${stockStream.id}'`);
-    
-    const newStockTransaction = await sequelize.query(`INSERT INTO stock_transactions 
-    ("symbol", "price", "size", "date", "version", "stockStreamId") VALUES 
-    ('${args.symbol}', ${args.price}, ${args.size}, '2021-10-09 08:32:15.639653+00', ${stockStream.version} + 1, '${stockStream.streamId}')`);
-
-    return newStockTransaction;
+    return stockTransaction;
   },
 }
-
 
 module.exports = {StockTransactionSchema, StockTransactionsSchema, StockTransactionMutationSchema}
