@@ -51,16 +51,23 @@ const StockTransactionMutationSchema = {
     price: { type: GraphQLFloat },
     size: { type: GraphQLInt },
     date: { type: GraphQLString },
-    version: { type: GraphQLInt },
   },
   //root: This is the result of the parent resolver. 
   //args: The arguments or data provided by the graphQL query. This can be seen as the request payload in REST API.
   //context: An object available to all resolvers. Any data that should be globally accessible to all resolvers are placed in the context. For example, we can pass the Sequelize models to the context.
   async resolve(root, args) {
-    const stockStream = await StockTransactionStream.findOne({
-      where: {
+    const [stockTransactionStream, created] = await StockTransactionStream.findOrCreate({
+      where: { type: args.symbol},
+      defaults: {
         type: args.symbol,
+        version: 1,
       }
+    });
+    console.log(stockTransactionStream)
+    console.log(created)
+
+    const stockStream = await StockTransactionStream.findOne({
+
     });
     //Optimistic locking is used to prevent concurrent updates to the same record.
     //So we will check if the version is the same as the one in the database.

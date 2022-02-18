@@ -9,7 +9,10 @@ module.exports = (sequelize, DataTypes) => {
   }
   StockTransactionStream.init(
     {
-      streamId: DataTypes.UUID,
+      streamId: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+      },
       version: DataTypes.INTEGER,
       type: DataTypes.STRING
     },
