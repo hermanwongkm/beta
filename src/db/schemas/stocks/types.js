@@ -35,4 +35,15 @@ const StockTransactionStreamType = new GraphQLObjectType({
   },
 });
 
-module.exports = {StockTransactionType, StockTransactionStreamType}
+const StockTransactionsAggregateType = new GraphQLObjectType({
+  name: 'stock_transaction_aggregate_type',
+  description: 'this represents a stock transctions averge price for a given stock',
+  fields: () => {
+    return {
+      symbol: { type: GraphQLString },
+      averagePrice: { type: GraphQLFloat },
+    };
+  },
+});
+
+module.exports = {StockTransactionType, StockTransactionStreamType, StockTransactionsAggregateType}

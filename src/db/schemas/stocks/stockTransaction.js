@@ -48,6 +48,7 @@ const StockTransactionMutationSchema = {
     price: { type: GraphQLFloat },
     size: { type: GraphQLInt },
     date: { type: GraphQLString },
+    type: { type: GraphQLString },
   },
   //root: This is the result of the parent resolver. 
   //args: The arguments or data provided by the graphQL query. This can be seen as the request payload in REST API.
@@ -70,6 +71,7 @@ const StockTransactionMutationSchema = {
       });
     }
     const stockTransaction = await StockTransaction.create({
+      type: args.type,
       symbol: args.symbol,
       price: args.price,
       size: args.size,
