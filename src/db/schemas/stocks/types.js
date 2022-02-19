@@ -42,6 +42,7 @@ const StockTransactionsAggregateType = new GraphQLObjectType({
     return {
       symbol: { type: GraphQLString },
       averagePrice: { type: GraphQLFloat },
+      size: { type: GraphQLInt },
     };
   },
 });
