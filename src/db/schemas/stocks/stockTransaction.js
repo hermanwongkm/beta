@@ -4,9 +4,11 @@ const {
   GraphQLFloat,
   GraphQLList,
 } = require('graphql');
-const {StockTransactionType } = require('./types');
-const db = require('../../models');
 
+const {StockTransactionType } = require('./types');
+const { reconstructStream } = require('./helper');
+
+const db = require('../../models');
 const { StockTransaction, StockTransactionStream } = db
 
 const StockTransactionSchema = {     
@@ -61,7 +63,7 @@ const StockTransactionMutationSchema = {
         version: 1,
       }
     });
-    if(!created) {
+    if(!created) { //If the stream existed previously
         await stockTransactionStream.update({
           version: stockTransactionStream.version + 1,
         },{
@@ -70,12 +72,18 @@ const StockTransactionMutationSchema = {
         where: { version: stockTransactionStream.version}
       });
     }
-    const stockTransaction = await StockTransaction.create({
+    let profitOrLoss = null;
+    if(args.type === "SELL"){
+      const {averagePrice} = await reconstructStream(args.symbol);
+       profitOrLoss = args.price - averagePrice;
+    }
+      const stockTransaction = await StockTransaction.create({
       type: args.type,
       symbol: args.symbol,
       price: args.price,
       size: args.size,
       date: args.date,
+      profitOrLoss: profitOrLoss,
       version: stockTransactionStream.version,
       stockStreamId: stockTransactionStream.streamId,
     });

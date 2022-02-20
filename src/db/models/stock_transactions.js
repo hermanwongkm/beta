@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       size: DataTypes.INTEGER,
       date: DataTypes.DATE,
+      profitOrLoss: DataTypes.FLOAT,
       type: DataTypes.STRING
     },
     {
