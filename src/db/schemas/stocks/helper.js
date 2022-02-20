@@ -7,6 +7,7 @@ const calculateAveragePrice = (currAveragePrice, currSize, newPrice, newSize) =>
 }
 //Todo:
 // 1. handle the case of selling more than you own
+//2. retry mechanism for optimistic locking
 const reconstructStream = async (symbol) => {
   const stockTransactions = await StockTransaction.findAll({
     order: [['version', 'ASC']],
