@@ -5,7 +5,8 @@ const calculateAveragePrice = (currAveragePrice, currSize, newPrice, newSize) =>
   const newAveragePrice = (currAveragePrice * currSize + newPrice * newSize) / (currSize + newSize);
   return newAveragePrice;
 }
-
+//Todo:
+// 1. handle the case of selling more than you own
 const reconstructStream = async (symbol) => {
   const stockTransactions = await StockTransaction.findAll({
     order: [['version', 'ASC']],
@@ -29,4 +30,8 @@ const reconstructStream = async (symbol) => {
   return {symbol: symbol, averagePrice: accumulated.averagePrice, size: accumulated.size};
 }
 
-module.exports = {reconstructStream}
+function roundToTwoDecimal(v) {
+  return Math.ceil(v * Math.pow(10, 2)) / Math.pow(10, 2);
+}
+
+module.exports = {reconstructStream,roundToTwoDecimal}

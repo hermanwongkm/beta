@@ -6,7 +6,7 @@ const {
 } = require('graphql');
 
 const {StockTransactionType } = require('./types');
-const { reconstructStream } = require('./helper');
+const { reconstructStream, roundToTwoDecimal } = require('./helper');
 
 const db = require('../../models');
 const { StockTransaction, StockTransactionStream } = db
@@ -83,7 +83,7 @@ const StockTransactionMutationSchema = {
       price: args.price,
       size: args.size,
       date: args.date,
-      profitOrLoss: profitOrLoss,
+      profitOrLoss: roundToTwoDecimal(profitOrLoss),
       version: stockTransactionStream.version,
       stockStreamId: stockTransactionStream.streamId,
     });
