@@ -17,6 +17,7 @@ const StockTransactionType = new GraphQLObjectType({
       size: { type: GraphQLInt },
       date: { type: GraphQLString },
       type: { type: GraphQLString },
+      profitOrLoss: { type: GraphQLFloat },
       stockTransactionStream: {type:StockTransactionStreamType},
     };
   },
