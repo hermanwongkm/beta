@@ -56,6 +56,7 @@ const StockTransactionMutationSchema = {
   //args: The arguments or data provided by the graphQL query. This can be seen as the request payload in REST API.
   //context: An object available to all resolvers. Any data that should be globally accessible to all resolvers are placed in the context. For example, we can pass the Sequelize models to the context.
   async resolve(root, args) {
+    console.log(args)
     const [stockTransactionStream, created] = await StockTransactionStream.findOrCreate({
       where: { type: args.symbol},
       defaults: {
@@ -77,6 +78,7 @@ const StockTransactionMutationSchema = {
       const {averagePrice} = await reconstructStream(args.symbol);
        profitOrLoss = args.price - averagePrice;
     }
+    console.log(args.date)
       const stockTransaction = await StockTransaction.create({
       type: args.type,
       symbol: args.symbol,
