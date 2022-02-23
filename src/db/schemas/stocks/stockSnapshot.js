@@ -13,4 +13,14 @@ const StockTransactionsAggregateSchema = {
   }
 }
 
+const StockTransactionsAggregatesSchema = {     
+  type: StockTransactionsAggregateType,
+  args: {
+    symbol: { type: GraphQLString }
+  },
+  async resolve(root, args) {
+    return reconstructStream(args.symbol);
+  }
+}
+
 module.exports = {StockTransactionsAggregateSchema}

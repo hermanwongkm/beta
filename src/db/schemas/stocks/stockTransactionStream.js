@@ -2,14 +2,15 @@ const {
   GraphQLList,
 } = require('graphql');
 const db = require('../../models');
-const {StockTransactionStreamType} = require('./types');
+const { reconstructStreamWithArray } = require('./helper');
+const {StockTransactionsAggregateType} = require('./types');
 const { StockTransactionStream } = db
 
 const StockTransactionStreamSchema = {     
-  type: new GraphQLList(StockTransactionStreamType),
+  type: new GraphQLList(StockTransactionsAggregateType),
   args: {},
   async resolve(root, args) {
-    const user = await StockTransactionStream.findAll({
+    const stockTransactionStreams = await StockTransactionStream.findAll({
       include: [
         {
           as: 'stockTransactions',
@@ -17,9 +18,14 @@ const StockTransactionStreamSchema = {
         }
       ]
       });
-    if (user) {
-      return user;
-    }
+      x = stockTransactionStreams.map(stockTransactionStream => {
+        return {
+          symbol: stockTransactionStream.type, 
+          ...reconstructStreamWithArray(stockTransactionStream.stockTransactions)
+        }
+      })
+      console.log(x)
+      return x;
   }
 }
 

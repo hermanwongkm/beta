@@ -16,7 +16,7 @@ const reconstructStream = async (symbol) => {
       symbol: symbol
     }
   });
-  accumulated = stockTransactions.reduce((accumulate, currentStockTransaction) => {
+  const accumulated = stockTransactions.reduce((accumulate, currentStockTransaction) => {
     if(currentStockTransaction.type === "BUY"){
       accumulate.averagePrice = calculateAveragePrice(accumulate.averagePrice, accumulate.size, currentStockTransaction.price, currentStockTransaction.size);
       accumulate.size += currentStockTransaction.size;
@@ -31,8 +31,24 @@ const reconstructStream = async (symbol) => {
   return {symbol: symbol, averagePrice: accumulated.averagePrice, size: accumulated.size};
 }
 
+const reconstructStreamWithArray = (stockTransactions) => {
+  const accumulated = stockTransactions.reduce((accumulate, currentStockTransaction) => {
+    if(currentStockTransaction.type === "BUY"){
+      accumulate.averagePrice = calculateAveragePrice(accumulate.averagePrice, accumulate.size, currentStockTransaction.price, currentStockTransaction.size);
+      accumulate.size += currentStockTransaction.size;
+      return accumulate;
+    }
+    else if(currentStockTransaction.type === "SELL"){ 
+      accumulate.size -= currentStockTransaction.size;
+      return accumulate;
+    }
+  },{size: 0, averagePrice: 0});
+
+  return { averagePrice: accumulated.averagePrice, size: accumulated.size};
+}
+
 function roundToTwoDecimal(v) {
   return Math.ceil(v * Math.pow(10, 2)) / Math.pow(10, 2);
 }
 
-module.exports = {reconstructStream,roundToTwoDecimal}
+module.exports = {reconstructStream,roundToTwoDecimal, reconstructStreamWithArray}
